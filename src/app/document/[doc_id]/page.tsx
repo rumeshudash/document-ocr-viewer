@@ -11,6 +11,7 @@ export async function generateMetadata({
         `/api/document/${doc_id}`
     );
     const document = data?.data;
+
     return {
         title: document.title,
         description: document.status,
@@ -32,7 +33,7 @@ export default async function DocumentPage({
     const document = data?.data;
 
     return (
-        <div>
+        <div className='p-4'>
             {document.title} {sections.data.sections[0].title}
         </div>
     );
