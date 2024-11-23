@@ -1,8 +1,9 @@
+import { notFound } from 'next/navigation';
+import React from 'react';
+
 import { Header } from '@/components/header';
 import { api } from '@/lib/axios';
 import { Document } from '@/types/document.types';
-import { notFound } from 'next/navigation';
-import React from 'react';
 
 const DocumentLayout = async ({
     children,
@@ -12,9 +13,11 @@ const DocumentLayout = async ({
     params: Promise<{ doc_id: string }>;
 }) => {
     const { doc_id } = await params;
-    const { data } = await api.get<{ data: Document }>(`/api/document/${doc_id}`).catch(() => {
-        notFound();
-    });
+    const { data } = await api
+        .get<{ data: Document }>(`/api/document/${doc_id}`)
+        .catch(() => {
+            notFound();
+        });
     const document = data?.data;
 
     return (

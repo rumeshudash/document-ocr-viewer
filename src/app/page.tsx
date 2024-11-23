@@ -1,8 +1,9 @@
+import Link from 'next/link';
+
 import { DocumentCard } from '@/components/documentCard';
 import { Header } from '@/components/header';
 import { api } from '@/lib/axios';
 import { Document } from '@/types/document.types';
-import Link from 'next/link';
 
 export default async function Home() {
     const { data } = await api.get('/api/documents');
@@ -10,11 +11,14 @@ export default async function Home() {
 
     return (
         <article>
-            <Header title="Documents" subtitle="Select a document to view" />
-            <section className="flex flex-wrap gap-4 p-4">
+            <Header title='Documents' subtitle='Select a document to view' />
+            <section className='flex flex-wrap gap-4 p-4'>
                 {documents.map((document: Document) => {
                     return (
-                        <Link href={`/document/${document.doc_id}`} key={document.doc_id}>
+                        <Link
+                            href={`/document/${document.doc_id}`}
+                            key={document.doc_id}
+                        >
                             <DocumentCard document={document} isLink />
                         </Link>
                     );

@@ -8,10 +8,12 @@ export const Header = ({
     subtitle?: string;
 }>) => {
     return (
-        <header className="flex items-center justify-between p-2 border-b">
+        <header className='flex items-center justify-between p-2 border-b'>
             <div>
-                <h1 className="text-xl font-bold">{title}</h1>
-                {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+                <h1 className='text-xl font-bold'>{title}</h1>
+                {subtitle && (
+                    <p className='text-xs text-muted-foreground'>{subtitle}</p>
+                )}
             </div>
             <ThemeToggle />
         </header>

@@ -1,9 +1,15 @@
 import { api } from '@/lib/axios';
 import { Document, Section } from '@/types/document.types';
 
-export async function generateMetadata({ params }: { params: Promise<{ doc_id: string }> }) {
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ doc_id: string }>;
+}) {
     const { doc_id } = await params;
-    const { data } = await api.get<{ data: Document }>(`/api/document/${doc_id}`);
+    const { data } = await api.get<{ data: Document }>(
+        `/api/document/${doc_id}`
+    );
     const document = data?.data;
     return {
         title: document.title,
@@ -11,10 +17,18 @@ export async function generateMetadata({ params }: { params: Promise<{ doc_id: s
     };
 }
 
-export default async function DocumentPage({ params }: { params: Promise<{ doc_id: string }> }) {
+export default async function DocumentPage({
+    params,
+}: {
+    params: Promise<{ doc_id: string }>;
+}) {
     const { doc_id } = await params;
-    const { data } = await api.get<{ data: Document }>(`/api/document/${doc_id}`);
-    const { data: sections } = await api.get<{ data: { sections: Section[] } }>(`/api/document/${doc_id}/sections`);
+    const { data } = await api.get<{ data: Document }>(
+        `/api/document/${doc_id}`
+    );
+    const { data: sections } = await api.get<{ data: { sections: Section[] } }>(
+        `/api/document/${doc_id}/sections`
+    );
     const document = data?.data;
 
     return (

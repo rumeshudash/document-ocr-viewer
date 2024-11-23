@@ -17,27 +17,27 @@ export function ThemeToggle() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
+                <Button variant='ghost' size='icon'>
+                    <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
+                    <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
+                    <span className='sr-only'>Toggle theme</span>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align='end'>
                 <DropdownMenuItem onClick={() => setTheme('light')}>
-                    <Sun className="mr-2 h-4 w-4" />
-                    <span className="flex-1">Light</span>
-                    {theme === 'light' && <Check className="h-4 w-4" />}
+                    <Sun className='mr-2 h-4 w-4' />
+                    <span className='flex-1'>Light</span>
+                    {theme === 'light' && <Check className='h-4 w-4' />}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('dark')}>
-                    <Moon className="mr-2 h-4 w-4" />
-                    <span className="flex-1">Dark</span>
-                    {theme === 'dark' && <Check className="h-4 w-4" />}
+                    <Moon className='mr-2 h-4 w-4' />
+                    <span className='flex-1'>Dark</span>
+                    {theme === 'dark' && <Check className='h-4 w-4' />}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('system')}>
-                    <Laptop className="mr-2 h-4 w-4" />
-                    <span className="flex-1">System</span>
-                    {theme === 'system' && <Check className="h-4 w-4" />}
+                    <Laptop className='mr-2 h-4 w-4' />
+                    <span className='flex-1'>System</span>
+                    {theme === 'system' && <Check className='h-4 w-4' />}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
