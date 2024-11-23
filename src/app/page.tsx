@@ -5,6 +5,8 @@ import { Header } from '@/components/header';
 import { api } from '@/lib/axios';
 import { Document } from '@/types/document.types';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
     const { data } = await api.get('/api/documents');
     const documents = data?.data?.documents || [];

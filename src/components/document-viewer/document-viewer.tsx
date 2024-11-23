@@ -2,7 +2,7 @@ interface DocumentViewerProps {
     document: Document;
 }
 
-const DocumentViewer = ({ document }: DocumentViewerProps) => {
+const DocumentViewer = ({}: DocumentViewerProps) => {
     return <div>DocumentViewer</div>;
 };
 
