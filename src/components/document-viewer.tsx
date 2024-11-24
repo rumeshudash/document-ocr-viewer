@@ -1,86 +1,187 @@
-import { Minus, Plus } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+/* eslint-disable @next/next/no-img-element */
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { Document } from '@/types/document.types';
 
 import { Button } from './ui/button';
-import { ScrollArea } from './ui/scroll-area';
 
 interface DocumentViewerProps {
     document: Document;
-    maxZoom?: number;
-    minZoom?: number;
+    zoom?: 'fit' | '75' | '100';
     className?: string;
+    highLights?: Highlight[];
+    activeHighLights?: Highlight['position'][];
 }
 
-const MAX_ZOOM = 150;
-const MIN_ZOOM = 50;
+interface Highlight {
+    page: number;
+    position: [number, number, number, number];
+    label?: string;
+    color: string;
+}
+
+interface HighlightWithActive extends Highlight {
+    active: boolean;
+}
 
 export const DocumentViewer = ({
     document,
-    maxZoom = MAX_ZOOM,
-    minZoom = MIN_ZOOM,
+    zoom = 'fit',
     className,
+    highLights,
+    activeHighLights = [],
 }: DocumentViewerProps) => {
-    const [zoom, setZoom] = useState(100);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [scale, setScale] = useState(0);
 
-    const handleZoomIn = () => {
-        setZoom((prev) => Math.min(prev + 10, maxZoom));
+    useLayoutEffect(() => {
+        const updateScale = () => {
+            if (!containerRef.current) return;
+
+            const container = containerRef.current;
+            const currentImage = document.pages[currentPage - 1].image;
+            const scaleX = container.clientWidth / currentImage.width;
+            const scaleY = container.clientHeight / currentImage.height;
+
+            const scale = Math.min(scaleX, scaleY);
+            if (zoom === 'fit') {
+                setScale(scale);
+            } else if (zoom === '75') {
+                setScale(scale * 0.75);
+            } else {
+                setScale(1);
+            }
+        };
+
+        updateScale();
+        window.addEventListener('resize', updateScale);
+
+        return () => window.removeEventListener('resize', updateScale);
+    }, [zoom, currentPage, document.pages]);
+
+    const totalPages = document.pages.length;
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
     };
 
-    const handleZoomOut = () => {
-        setZoom((prev) => Math.max(prev - 10, minZoom));
+    const goToPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
     };
+
+    const currentPageHighLights = useMemo<HighlightWithActive[]>(
+        () =>
+            (highLights ?? [])
+                ?.filter((highlight) => highlight.page === currentPage)
+                .map((highlight) => ({
+                    ...highlight,
+                    active: (activeHighLights ?? []).some(
+                        (active) =>
+                            active?.join(',') === highlight.position?.join(',')
+                    ),
+                })),
+        [highLights, currentPage, activeHighLights]
+    );
 
     return (
         <div
             className={cn(
-                'relative dark:bg-card bg-neutral-600 flex-1',
+                'relative dark:bg-neutral-900 bg-neutral-500 flex-1 max-h-full overflow-hidden',
                 className
             )}
+            ref={containerRef}
         >
-            <div className='absolute top-4 right-4 flex gap-2 z-10 select-none'>
-                <Button
-                    variant='outline'
-                    size='icon'
-                    onClick={handleZoomOut}
-                    disabled={zoom <= minZoom}
-                >
-                    <Minus className='h-4 w-4' />
-                </Button>
-                <Button
-                    variant='outline'
-                    size='icon'
-                    onClick={handleZoomIn}
-                    disabled={zoom >= maxZoom}
-                >
-                    <Plus className='h-4 w-4' />
-                </Button>
+            <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10 select-none'>
+                {totalPages > 1 && (
+                    <Button
+                        variant='outline'
+                        size='sm'
+                        onClick={goToPreviousPage}
+                        disabled={currentPage <= 1}
+                    >
+                        Previous
+                    </Button>
+                )}
+                <span className='text-sm font-medium text-black'>
+                    Page {currentPage} of {totalPages}
+                </span>
+                {totalPages > 1 && (
+                    <Button
+                        variant='outline'
+                        size='sm'
+                        onClick={goToNextPage}
+                        disabled={currentPage >= totalPages}
+                    >
+                        Next
+                    </Button>
+                )}
             </div>
-            <ScrollArea className='h-full'>
+            <div className='h-full max-h-full overflow-auto'>
                 <div
-                    className='flex flex-col gap-4 items-center'
+                    className='relative mx-auto m-3'
                     style={{
-                        transform: `scale(${zoom / 100})`,
-                        transformOrigin: 'top',
-                        transition: 'transform 0.2s ease-in-out',
+                        width: `${document.pages[currentPage - 1].image.width * scale}px`,
+                        height: `${document.pages[currentPage - 1].image.height * scale}px`,
                     }}
                 >
-                    {document.pages.map((page) => (
-                        <Image
-                            key={page.id}
-                            src={'/pages/' + page.image.url}
-                            alt={`Page ${page.id}`}
-                            width={page.image.width}
-                            height={page.image.height}
-                            className='object-contain w-full h-full max-h-[calc(100vh-theme(spacing.20))] float-left m-3'
-                            loading='lazy'
-                        />
-                    ))}
+                    <img
+                        src={
+                            '/pages/' +
+                            document.pages[currentPage - 1].image.url
+                        }
+                        alt={`Page ${currentPage}`}
+                        width={
+                            document.pages[currentPage - 1].image.width * scale
+                        }
+                        height={
+                            document.pages[currentPage - 1].image.height * scale
+                        }
+                    />
+                    <div className='absolute top-0 left-0 w-full h-full'>
+                        {currentPageHighLights?.map((highlight) => {
+                            if (highlight.position?.length !== 4) return null;
+                            return (
+                                <svg
+                                    key={highlight.position.join(',')}
+                                    className='absolute hover:ring-offset-2 hover:ring'
+                                    style={{
+                                        left: highlight.position[0] * scale,
+                                        top: highlight.position[1] * scale,
+                                    }}
+                                    width={
+                                        (highlight.position[2] -
+                                            highlight.position[0]) *
+                                        scale
+                                    }
+                                    height={
+                                        (highlight.position[3] -
+                                            highlight.position[1]) *
+                                        scale
+                                    }
+                                    aria-label={highlight.label}
+                                >
+                                    <rect
+                                        width='100%'
+                                        height='100%'
+                                        fill={
+                                            highlight.active
+                                                ? highlight.color
+                                                : 'transparent'
+                                        }
+                                        fillOpacity={0.4}
+                                    />
+                                </svg>
+                            );
+                        })}
+                    </div>
                 </div>
-            </ScrollArea>
+            </div>
         </div>
     );
 };

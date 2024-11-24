@@ -29,9 +29,9 @@ export interface Field {
     id: number;
     acc: number;
     content: {
-        page: number;
         value: string;
-        position: number[];
+        page: number;
+        position: [number, number, number, number];
         review_required: boolean;
         is_valid_format: boolean;
     };
