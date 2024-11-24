@@ -21,7 +21,7 @@ const DocumentLayout = async ({
     const document = data?.data;
 
     return (
-        <article>
+        <article className='flex h-screen flex-col'>
             <Header title={document.title} />
             {children}
         </article>
