@@ -41,4 +41,14 @@ export interface Field {
     no_items_row: number;
     format: string;
     ignore: boolean;
+    color?: string;
+}
+
+export interface Highlight {
+    id: number;
+    page: number;
+    position: [number, number, number, number];
+    label?: string;
+    color: string;
+    isSelected?: boolean;
 }

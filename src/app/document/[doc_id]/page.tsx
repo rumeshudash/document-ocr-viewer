@@ -1,4 +1,5 @@
 import { api } from '@/lib/axios';
+import { generateRandomColor } from '@/lib/color';
 import { Document, Section } from '@/types/document.types';
 
 import { DocumentReviewer } from './_components/document-reviewer';
@@ -34,10 +35,13 @@ export default async function DocumentPage({
     }>(`/api/document/${doc_id}/sections`);
     const document = data?.data;
 
-    return (
-        <DocumentReviewer
-            document={document}
-            sections={sectionData.data?.sections}
-        />
-    );
+    const sections = sectionData.data?.sections.map((section) => ({
+        ...section,
+        children: section.children.map((child) => ({
+            ...child,
+            color: generateRandomColor(),
+        })),
+    }));
+
+    return <DocumentReviewer document={document} sections={sections} />;
 }

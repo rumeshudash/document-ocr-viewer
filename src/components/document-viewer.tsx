@@ -2,7 +2,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { Document } from '@/types/document.types';
+import { Document, Highlight } from '@/types/document.types';
 
 import { Button } from './ui/button';
 
@@ -12,17 +12,11 @@ interface DocumentViewerProps {
     className?: string;
     highLights?: Highlight[];
     activeHighLights?: Highlight['position'][];
-}
-
-interface Highlight {
-    page: number;
-    position: [number, number, number, number];
-    label?: string;
-    color: string;
+    onHighlightHover?: (highlight: Highlight | null) => void;
 }
 
 interface HighlightWithActive extends Highlight {
-    active: boolean;
+    isActive: boolean;
 }
 
 export const DocumentViewer = ({
@@ -31,6 +25,7 @@ export const DocumentViewer = ({
     className,
     highLights,
     activeHighLights = [],
+    onHighlightHover,
 }: DocumentViewerProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -81,7 +76,7 @@ export const DocumentViewer = ({
                 ?.filter((highlight) => highlight.page === currentPage)
                 .map((highlight) => ({
                     ...highlight,
-                    active: (activeHighLights ?? []).some(
+                    isActive: (activeHighLights ?? []).some(
                         (active) =>
                             active?.join(',') === highlight.position?.join(',')
                     ),
@@ -149,7 +144,7 @@ export const DocumentViewer = ({
                             return (
                                 <svg
                                     key={highlight.position.join(',')}
-                                    className='absolute hover:ring-offset-2 hover:ring'
+                                    className='absolute'
                                     style={{
                                         left: highlight.position[0] * scale,
                                         top: highlight.position[1] * scale,
@@ -165,15 +160,25 @@ export const DocumentViewer = ({
                                         scale
                                     }
                                     aria-label={highlight.label}
+                                    onMouseEnter={() =>
+                                        onHighlightHover?.(highlight)
+                                    }
+                                    onMouseLeave={() =>
+                                        onHighlightHover?.(null)
+                                    }
                                 >
                                     <rect
                                         width='100%'
                                         height='100%'
-                                        fill={
-                                            highlight.active
-                                                ? highlight.color
-                                                : 'transparent'
-                                        }
+                                        className={cn(
+                                            'opacity-0 hover:opacity-100',
+                                            {
+                                                'opacity-100':
+                                                    highlight.isActive ||
+                                                    highlight.isSelected,
+                                            }
+                                        )}
+                                        fill={highlight.color}
                                         fillOpacity={0.4}
                                     />
                                 </svg>
