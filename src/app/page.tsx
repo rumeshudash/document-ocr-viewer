@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { DocumentCard } from '@/components/documentCard';
+import { DocumentCard } from '@/components/document-card';
 import { Header } from '@/components/header';
 import { api } from '@/lib/axios';
 import { Document } from '@/types/document.types';
