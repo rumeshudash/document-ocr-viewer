@@ -90,6 +90,32 @@ The application uses a modern React stack with:
 - `/api/document/[doc_id]` - Get document details
 - `/api/document/[doc_id]/sections` - Get document sections
 
+## Performance Analysis
+
+Below are the Lighthouse analysis results for key pages of the application:
+
+### Home Page
+![Home Page Lighthouse Analysis](@home-page.png)
+
+### Review Page
+![Review Page Lighthouse Analysis](@review-page.png)
+
+The application achieves strong performance metrics across both pages, with particular attention paid to:
+
+- First Contentful Paint (FCP)
+- Time to Interactive (TTI) 
+- Cumulative Layout Shift (CLS)
+- Search Engine Optimization (SEO)
+- Accessibility compliance
+
+Key optimizations implemented:
+- Image optimization and lazy loading
+- Component code splitting
+- Server-side rendering where beneficial
+- Responsive design practices
+- ARIA attributes and semantic HTML
+
+
 ## Learn More
 
 To learn more about the technologies used in this project:
