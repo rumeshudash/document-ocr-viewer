@@ -81,12 +81,18 @@ export const FieldCard = ({
                     </div>
                     <div className='flex items-center gap-2'>
                         <Checkbox
+                            className='w-5 h-5'
+                            title='Select field'
                             checked={checked}
                             onCheckedChange={onChecked}
                         />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant='ghost' size='icon'>
+                                <Button
+                                    variant='ghost'
+                                    size='icon'
+                                    title='More options'
+                                >
                                     <MoreVerticalIcon className='w-4 h-4' />
                                 </Button>
                             </DropdownMenuTrigger>
