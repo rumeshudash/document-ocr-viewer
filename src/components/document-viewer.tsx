@@ -1,14 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
+import { ChevronDown } from 'lucide-react';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { Document, Highlight } from '@/types/document.types';
 
 import { Button } from './ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 interface DocumentViewerProps {
     document: Document;
-    zoom?: 'fit' | '75' | '100';
+    defaultZoom?: 'fit' | '75' | '100';
     className?: string;
     highLights?: Highlight[];
     activeHighLights?: Highlight['position'][];
@@ -27,7 +34,7 @@ interface HighlightWithActive extends Highlight {
  */
 export const DocumentViewer = ({
     document,
-    zoom = 'fit',
+    defaultZoom = 'fit',
     className,
     highLights,
     activeHighLights = [],
@@ -47,6 +54,9 @@ export const DocumentViewer = ({
      * State to manage the scale of the document
      */
     const [scale, setScale] = useState(0);
+
+    const [zoom, setZoom] =
+        useState<DocumentViewerProps['defaultZoom']>(defaultZoom);
 
     /**
      * Effect to update the scale of the document based on the container size and the current page
@@ -127,6 +137,27 @@ export const DocumentViewer = ({
             )}
             ref={containerRef}
         >
+            <div className='absolute top-4 right-4 flex items-center gap-2 z-10'>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant='outline' size='sm'>
+                            {zoom === 'fit' ? 'Fit' : `${zoom}%`}{' '}
+                            <ChevronDown className='ml-1 h-4 w-4' />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                        <DropdownMenuItem onClick={() => setZoom('fit')}>
+                            Fit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setZoom('75')}>
+                            75%
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setZoom('100')}>
+                            100%
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
             <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10 select-none'>
                 {totalPages > 1 && (
                     <Button
