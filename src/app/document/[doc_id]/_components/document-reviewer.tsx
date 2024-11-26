@@ -1,7 +1,9 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
+import { FieldSelectionConfirmed } from '@/components/alerts/field-selection-confirmed';
 import { DocumentViewer } from '@/components/document-viewer';
 import { FieldSelector } from '@/components/field-selector';
 import { Document, Field, Highlight, Section } from '@/types/document.types';
@@ -13,6 +15,8 @@ export const DocumentReviewer = ({
     document: Document;
     sections: Section[];
 }) => {
+    const router = useRouter();
+
     const [sections, setSections] = useState(propsSections);
 
     const [selectedFields, setSelectedFields] = useState<Field[]>([]);
@@ -20,6 +24,8 @@ export const DocumentReviewer = ({
     const [hoveredHighlight, setHoveredHighlight] = useState<Highlight | null>(
         null
     );
+    const [fieldSelectionConfirmed, setFieldSelectionConfirmed] =
+        useState(false);
 
     const highlights = useMemo(
         () =>
@@ -56,7 +62,7 @@ export const DocumentReviewer = ({
     };
 
     const handleConfirm = () => {
-        console.log('confirm');
+        setFieldSelectionConfirmed(true);
     };
 
     return (
@@ -77,6 +83,10 @@ export const DocumentReviewer = ({
                 onFieldHover={setHoveredField}
                 onFieldDelete={handleDeleteField}
                 onConfirm={handleConfirm}
+            />
+            <FieldSelectionConfirmed
+                open={fieldSelectionConfirmed}
+                onOpenChange={(open) => !open && router.push('/')}
             />
         </div>
     );

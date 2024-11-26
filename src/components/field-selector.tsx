@@ -4,6 +4,7 @@ import { useList, useUpdateEffect } from 'react-use';
 import { cn } from '@/lib/utils';
 import { Field, Section } from '@/types/document.types';
 
+import { ConfirmFieldSelection } from './alerts/confirm-field-selection';
 import { FieldCard } from './field-card';
 import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -122,12 +123,11 @@ export const FieldSelector = ({
                 <Button variant='secondary' onClick={handleSelectAll}>
                     Select All
                 </Button>
-                <Button
-                    onClick={onConfirm}
-                    disabled={selectedFields.length === 0}
-                >
-                    Confirm
-                </Button>
+                <ConfirmFieldSelection onConfirm={onConfirm}>
+                    <Button disabled={selectedFields.length === 0}>
+                        Confirm
+                    </Button>
+                </ConfirmFieldSelection>
             </div>
         </div>
     );
