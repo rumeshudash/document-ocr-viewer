@@ -1,8 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Document OCR Viewer
+
+A modern document OCR viewer built with Next.js, featuring field selection and document review capabilities.
+
+## Overview
+
+This project is built using [Next.js](https://nextjs.org), providing a robust foundation for a document OCR viewing and management system. It includes:
+
+- Document viewing and field selection interface
+- Dynamic document review workflow
+- Custom font implementation using Geist and Geist Mono
+- Modern component library with shadcn/ui
+- Theme switching support (Light/Dark mode)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Start the development server:
 
 ```bash
 npm run dev
@@ -10,27 +33,69 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── src/
+│   ├── app/                       # Next.js app router
+│   │   ├── api/                  # API endpoints
+│   │   │   ├── document/         # Document management APIs
+│   │   │   └── documents/        # Document listing APIs
+│   │   ├── document/             # Document viewer pages
+│   │   └── fonts/               # Custom fonts
+│   ├── data/                    # Static data
+│   ├── components/               # React components
+│   │   ├── alerts/              # Alert dialogs
+│   │   ├── ui/                  # Shared UI components
+│   │   ├── document-viewer.tsx  # Document viewing
+│   │   ├── document-card.tsx     # Document card component
+│   │   ├── field-badge.tsx        # Field badge component
+│   │   ├── field-card.tsx         # Field card component
+│   │   ├── field-selector.tsx   # Field selection
+│   │   ├── header.tsx             # Header component
+│   │   ├── status-icon.tsx        # Status icon component
+│   │   └── theme-toggle.tsx     # Theme switching
+│   ├── hooks/                   # Custom React hooks
+│   ├── lib/                     # Utility functions
+│   └── types/                   # TypeScript definitions
+```
+
+## Features
+
+- **Document Viewer**: Advanced document viewing interface with zoom controls
+- **Field Selection**: Interactive field selection and validation
+- **Theme Support**: Light and dark mode with system preference detection
+- **Type Safety**: Comprehensive TypeScript implementation
+- **Modern UI**: Responsive design using shadcn/ui components
+- **API Integration**: RESTful API endpoints for document management
+
+## Development
+
+The application uses a modern React stack with:
+
+- Next.js 15+ with App Router
+- TypeScript for type safety
+- Tailwind CSS for styling
+- shadcn/ui for components
+- Radix UI primitives
+- Axios for API requests
+
+## API Routes
+
+- `/api/documents` - List all documents
+- `/api/document/[doc_id]` - Get document details
+- `/api/document/[doc_id]/sections` - Get document sections
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project:
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Radix UI Documentation](https://www.radix-ui.com/docs/primitives)
+- [shadcn/ui Documentation](https://ui.shadcn.com/docs)
