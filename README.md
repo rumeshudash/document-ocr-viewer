@@ -95,10 +95,10 @@ The application uses a modern React stack with:
 Below are the Lighthouse analysis results for key pages of the application:
 
 ### Home Page
-![Home Page Lighthouse Analysis](@home-page.png)
+![Home Page Lighthouse Analysis](/lighthouse/home-page.png)
 
 ### Review Page
-![Review Page Lighthouse Analysis](@review-page.png)
+![Review Page Lighthouse Analysis](/lighthouse/review-page.png)
 
 The application achieves strong performance metrics across both pages, with particular attention paid to:
 
