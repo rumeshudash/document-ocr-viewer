@@ -14,6 +14,30 @@ import {
     DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
+/**
+ * FieldCard component displays a single field in a card format with interactive controls
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Field} props.field - The field object containing label, color, and content information
+ * @param {boolean} props.checked - Whether the field is currently checked/selected
+ * @param {boolean} props.active - Whether the field is currently active/focused
+ * @param {string} [props.className] - Additional CSS classes to apply to the card
+ * @param {(checked: boolean) => void} [props.onChecked] - Callback function when checkbox state changes
+ * @param {(hover: boolean) => void} [props.onHover] - Callback function when hover state changes
+ * @param {() => void} [props.onDelete] - Callback function when delete action is triggered
+ *
+ * @example
+ * ```tsx
+ * <FieldCard
+ *   field={{ label: "Name", color: "blue", content: { value: "John Doe" } }}
+ *   checked={false}
+ *   active={true}
+ *   onChecked={(checked) => console.log('Checked:', checked)}
+ *   onDelete={() => console.log('Delete clicked')}
+ * />
+ * ```
+ */
 export const FieldCard = ({
     field,
     checked,

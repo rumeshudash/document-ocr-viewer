@@ -16,6 +16,10 @@ const DocumentLayout = async ({
     const { data } = await api
         .get<{ data: Document }>(`/api/document/${doc_id}`)
         .catch(() => {
+            /**
+             * Redirects to the Next.js 404 not found page when document is not found
+             * @throws {NotFoundError} Throws Next.js not found error
+             */
             notFound();
         });
     const document = data?.data;

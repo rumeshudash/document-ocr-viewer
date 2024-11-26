@@ -19,6 +19,12 @@ interface HighlightWithActive extends Highlight {
     isActive: boolean;
 }
 
+/**
+ * DocumentViewer component for displaying a document with highlights
+ * @component
+ * @param {DocumentViewerProps} props - Component props
+ * @returns {JSX.Element} Document viewer with highlights
+ */
 export const DocumentViewer = ({
     document,
     zoom = 'fit',
@@ -27,11 +33,28 @@ export const DocumentViewer = ({
     activeHighLights = [],
     onHighlightHover,
 }: DocumentViewerProps) => {
+    /**
+     * Ref to the container element
+     */
     const containerRef = useRef<HTMLDivElement>(null);
+
+    /**
+     * State to manage the current page being displayed
+     */
     const [currentPage, setCurrentPage] = useState(1);
+
+    /**
+     * State to manage the scale of the document
+     */
     const [scale, setScale] = useState(0);
 
+    /**
+     * Effect to update the scale of the document based on the container size and the current page
+     */
     useLayoutEffect(() => {
+        /**
+         * Updates the scale of the document based on the container size and the current page
+         */
         const updateScale = () => {
             if (!containerRef.current) return;
 
@@ -56,20 +79,32 @@ export const DocumentViewer = ({
         return () => window.removeEventListener('resize', updateScale);
     }, [zoom, currentPage, document.pages]);
 
+    /**
+     * Total number of pages in the document
+     */
     const totalPages = document.pages.length;
 
+    /**
+     * Function to navigate to the next page
+     */
     const goToNextPage = () => {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
         }
     };
 
+    /**
+     * Function to navigate to the previous page
+     */
     const goToPreviousPage = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
     };
 
+    /**
+     * Memoized highlights for the current page
+     */
     const currentPageHighLights = useMemo<HighlightWithActive[]>(
         () =>
             (highLights ?? [])
@@ -139,7 +174,9 @@ export const DocumentViewer = ({
                         }
                     />
                     <div className='absolute top-0 left-0 w-full h-full'>
+                        {/* Renders highlights for the current page */}
                         {currentPageHighLights?.map((highlight) => {
+                            // Checks if the highlight has a valid position array
                             if (highlight.position?.length !== 4) return null;
                             return (
                                 <svg

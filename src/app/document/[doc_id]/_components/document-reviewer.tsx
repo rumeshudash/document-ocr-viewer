@@ -8,6 +8,13 @@ import { DocumentViewer } from '@/components/document-viewer';
 import { FieldSelector } from '@/components/field-selector';
 import { Document, Field, Highlight, Section } from '@/types/document.types';
 
+/**
+ * DocumentReviewer component for reviewing and selecting fields in a document
+ * @component
+ * @param {Object} props - Component props
+ * @param {Document} props.document - The document being reviewed
+ * @param {Section[]} props.sections - Array of sections containing fields
+ */
 export const DocumentReviewer = ({
     document,
     sections: propsSections,
@@ -17,16 +24,39 @@ export const DocumentReviewer = ({
 }) => {
     const router = useRouter();
 
+    /**
+     * State to manage document sections
+     */
     const [sections, setSections] = useState(propsSections);
 
+    /**
+     * State to manage selected fields
+     */
     const [selectedFields, setSelectedFields] = useState<Field[]>([]);
+
+    /**
+     * State to manage hovered field
+     */
     const [hoveredField, setHoveredField] = useState<Field | null>(null);
+
+    /**
+     * State to manage hovered highlight
+     */
     const [hoveredHighlight, setHoveredHighlight] = useState<Highlight | null>(
         null
     );
+
+    /**
+     * State to manage field selection confirmation
+     */
     const [fieldSelectionConfirmed, setFieldSelectionConfirmed] =
         useState(false);
 
+    /**
+     * Memoized highlights based on sections
+     * Creates highlight objects for each field in the sections
+     * @returns {Highlight[]} Array of highlight objects
+     */
     const highlights = useMemo(
         () =>
             sections.flatMap((section) =>
@@ -42,6 +72,11 @@ export const DocumentReviewer = ({
         [hoveredField?.id, sections]
     );
 
+    /**
+     * Memoized active highlights based on selected fields
+     * Filters highlights to only include those corresponding to selected fields
+     * @returns {Position[]} Array of position objects for selected fields
+     */
     const activeHighlights = useMemo(
         () =>
             highlights
@@ -52,6 +87,10 @@ export const DocumentReviewer = ({
         [highlights, selectedFields]
     );
 
+    /**
+     * Handles the deletion of a field from sections
+     * @param {Field} field - The field to delete
+     */
     const handleDeleteField = (field: Field) => {
         setSections(
             sections.map((section) => ({
@@ -61,6 +100,10 @@ export const DocumentReviewer = ({
         );
     };
 
+    /**
+     * Handles the confirmation of field selection
+     * Sets fieldSelectionConfirmed state to true
+     */
     const handleConfirm = () => {
         setFieldSelectionConfirmed(true);
     };
